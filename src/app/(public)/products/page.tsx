@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { getProducts } from '@/actions/products';
+import { getCategories } from '@/actions/categories';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import ProductCard from '@/components/products/ProductCard';
+import type { ProductFilters } from '@/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-import { getCategories } from '@/actions/categories';
-import { formatPrice } from '@/lib/utils';
-import { Search, SlidersHorizontal, ArrowRight, Eye, Star } from 'lucide-react';
-import type { ProductFilters } from '@/types';
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -72,7 +72,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               />
               {category && <input type="hidden" name="category" value={category} />}
               {sort && <input type="hidden" name="sort" value={sort} />}
-              <button type="submit" className="absolute right-3 text-stone-400 hover:text-primary">
+              <button type="submit" className="absolute right-3 text-stone-400 hover:text-primary" aria-label="Submit search">
                 <Search className="w-4 h-4" />
               </button>
             </form>
@@ -161,95 +161,9 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {productsData.data.map((product) => {
-                    const fallbackImage = 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=600&auto=format&fit=crop';
-                    const imageUrl = product.cover_image_url || fallbackImage;
-
-                    return (
-                      <div
-                        key={product.id}
-                        className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-luxury hover:shadow-luxury-hover border border-stone-250/50 transition-all duration-500"
-                      >
-                        {/* Image block */}
-                        <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={imageUrl}
-                            alt={product.name}
-                            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                            loading="lazy"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = fallbackImage;
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-card-shine opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-                          {product.is_featured && (
-                            <span className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-primary text-white">
-                              <Star className="w-2.5 h-2.5 fill-current" />
-                              <span>Signature</span>
-                            </span>
-                          )}
-
-                          {(product.discount_percentage || 0) > 0 && (
-                            <span className="absolute top-4 right-4 z-10 inline-flex px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-wider uppercase bg-red-600 text-white shadow-md">
-                              {product.discount_percentage}% OFF
-                            </span>
-                          )}
-
-                          {product.category?.name && (
-                            <span className="absolute bottom-4 left-4 z-10 inline-flex px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase bg-stone-900/80 text-white backdrop-blur-sm">
-                              {product.category.name}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Text info content */}
-                        <div className="flex-grow p-6 flex flex-col justify-between">
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center justify-between gap-2">
-                              <h3 className="font-serif text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-1">
-                                {product.name}
-                              </h3>
-                            </div>
-                            {product.wood_type && (
-                              <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/60 self-start">
-                                Wood: {product.wood_type}
-                              </span>
-                            )}
-                            <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                              {product.short_description || product.description || 'Custom crafted and hand-finished woodworking masterpieces.'}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between border-t border-stone-200/60 pt-4 mt-6">
-                            <div className="flex flex-col">
-                              <span className="text-[9px] text-muted-foreground font-semibold uppercase tracking-wider">Investment</span>
-                              <div className="flex items-baseline gap-1.5">
-                                <span className="text-sm font-bold text-primary">
-                                  {product.price_label || (product.price ? formatPrice(product.price) : 'Price on Request')}
-                                </span>
-                                {product.original_price && product.price && product.original_price > product.price && (
-                                  <span className="text-2xs text-stone-400 line-through">
-                                    {formatPrice(product.original_price)}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            <Link
-                              href={`/products/${product.slug}`}
-                              className="inline-flex items-center gap-1 px-3.5 py-2 bg-secondary text-primary hover:bg-primary hover:text-white rounded-full text-2xs font-bold tracking-wide transition-all duration-300"
-                            >
-                              <span>View details</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
-                            </Link>
-                          </div>
-                        </div>
-
-                      </div>
-                    );
-                  })}
+                  {productsData.data.map((product, idx) => (
+                    <ProductCard key={product.id} product={product} index={idx} />
+                  ))}
                 </div>
 
                 {/* Pagination Controls */}
