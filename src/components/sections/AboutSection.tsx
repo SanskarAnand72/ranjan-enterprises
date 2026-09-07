@@ -31,7 +31,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
 
   const stats: StatItem[] = (content?.content_json?.stats as StatItem[]) || defaultStats;
   
-  const defaultAboutImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop';
+  const defaultAboutImage = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop';
   const aboutImage = (content?.content_json?.about_image_url as string) || defaultAboutImage;
 
   return (
