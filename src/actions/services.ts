@@ -11,6 +11,7 @@ function normalizeService(id: string, data: any): Service {
     title: data.title || '',
     description: data.description || '',
     icon: data.icon || 'Hammer',
+    image_url: data.image_url || data.imageUrl || null,
     features: data.features || [],
     is_active: data.is_active ?? true,
     display_order: typeof data.display_order === 'number' ? data.display_order : 0,

@@ -204,6 +204,7 @@ export interface Service {
   title: string;
   description: string;
   icon: string | null;
+  image_url?: string | null;
   features: string[];
   is_active: boolean;
   display_order: number;

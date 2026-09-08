@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Phone, MessageSquare, ArrowRight, Star, Check, 
+  Phone, MessageSquare, Star, 
   ChevronRight, Calendar, ArrowLeft, Maximize2, X,
-  ShieldCheck, Sparkles, Hammer, Award, CheckCircle2, AlertCircle, RefreshCw
+  ShieldCheck, Sparkles, Hammer, Award, CheckCircle2, AlertCircle, RefreshCw, Compass
 } from 'lucide-react';
 import { formatPrice, whatsappUrl } from '@/lib/utils';
 import { enquirySchema, type EnquiryFormData } from '@/lib/validations/enquiry';
@@ -113,14 +113,14 @@ export default function ProductDetailClient({ product, settings, relatedProducts
   };
 
   return (
-    <div className="py-10 md:py-16 bg-background min-h-screen">
+    <div className="py-12 md:py-20 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Navigation Breadcrumb */}
-        <nav className="flex items-center flex-wrap gap-2 mb-8 text-xs font-semibold tracking-wide text-muted-foreground">
+        <nav className="flex items-center flex-wrap gap-2 mb-8 text-xs font-semibold tracking-wide text-stone-500 uppercase">
           <Link href="/products" className="hover:text-primary transition-colors flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>All Masterpieces</span>
+            <span>Masterpieces</span>
           </Link>
           <ChevronRight className="w-3 h-3 text-stone-400" />
           {product.category?.name && (
@@ -131,7 +131,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
               <ChevronRight className="w-3 h-3 text-stone-400" />
             </>
           )}
-          <span className="text-foreground line-clamp-1">{product.name}</span>
+          <span className="text-stone-900 line-clamp-1 font-bold">{product.name}</span>
         </nav>
 
         {/* Product Overview Section */}
@@ -142,7 +142,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
             
             {/* Main Image Viewport with Magnifier */}
             <div 
-              className="relative aspect-square w-full rounded-3xl overflow-hidden shadow-luxury border border-stone-250/60 bg-stone-100 cursor-zoom-in group"
+              className="relative aspect-square w-full rounded-3xl overflow-hidden shadow-luxury border border-stone-200/80 bg-stone-100 cursor-zoom-in group"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={() => setIsLightboxOpen(true)}
@@ -170,7 +170,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
                   e.stopPropagation();
                   setIsLightboxOpen(true);
                 }}
-                className="absolute bottom-4 right-4 p-3 rounded-full bg-stone-900/80 hover:bg-stone-900 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:scale-105"
+                className="absolute bottom-4 right-4 p-3 rounded-full bg-stone-950/80 hover:bg-stone-950 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:scale-105"
                 title="Open Fullscreen View"
               >
                 <Maximize2 className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
 
               {/* Badge Overlay */}
               {product.is_featured && (
-                <span className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-primary text-white shadow-md">
+                <span className="absolute top-4 left-4 z-10 badge-gold">
                   <Star className="w-3 h-3 fill-current" />
                   <span>Signature Piece</span>
                 </span>
@@ -195,7 +195,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
                     onClick={() => setActiveIdx(idx)}
                     className={`relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 transition-all duration-300 ${
                       activeIdx === idx 
-                        ? 'border-primary ring-2 ring-primary/30 shadow-md scale-95' 
+                        ? 'border-primary ring-2 ring-primary/20 shadow-md scale-95' 
                         : 'border-stone-200 opacity-70 hover:opacity-100'
                     }`}
                   >
@@ -218,42 +218,43 @@ export default function ProductDetailClient({ product, settings, relatedProducts
           <div className="lg:col-span-6 flex flex-col gap-6">
             
             {/* Title & Category Header */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 {product.category?.name && (
-                  <span className="px-3 py-1 bg-stone-100 text-stone-700 rounded-full text-2xs font-bold uppercase tracking-widest border border-stone-200">
+                  <span className="badge-gold">
                     {product.category.name}
                   </span>
                 )}
                 {product.wood_type && (
-                  <span className="px-3 py-1 bg-amber-50 text-amber-900 rounded-full text-2xs font-bold uppercase tracking-widest border border-amber-200">
-                    Wood: {product.wood_type}
+                  <span className="badge-wood">
+                    <Compass className="w-3 h-3 text-accent" />
+                    <span>Timber: {product.wood_type}</span>
                   </span>
                 )}
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-950 leading-tight">
                 {product.name}
               </h1>
 
               {product.sku && (
-                <span className="text-2xs font-bold text-muted-foreground uppercase tracking-widest">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">
                   SKU / Identifier: {product.sku}
                 </span>
               )}
             </div>
 
-            {/* Price & Availability Investment Card */}
-            <div className="p-6 bg-white rounded-3xl border border-stone-250/70 shadow-luxury flex flex-col gap-4">
+            {/* Price & Investment Card */}
+            <div className="p-6 bg-white rounded-3xl border border-stone-200/80 shadow-luxury flex flex-col gap-4">
               <div className="flex flex-wrap items-baseline justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-2xs text-muted-foreground font-bold uppercase tracking-widest">Investment</span>
+                  <span className="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Investment</span>
                   <div className="flex items-baseline gap-3">
                     <span className="text-3xl sm:text-4xl font-serif font-bold text-primary">
-                      {product.price_label || (product.price ? formatPrice(product.price) : 'Price on Request')}
+                      {product.price_label || (product.price ? formatPrice(product.price) : 'Bespoke Quote')}
                     </span>
                     {product.original_price && product.price && product.original_price > product.price && (
-                      <span className="text-lg text-stone-400 line-through font-semibold">
+                      <span className="text-base text-stone-400 line-through font-semibold">
                         {formatPrice(product.original_price)}
                       </span>
                     )}
@@ -261,27 +262,27 @@ export default function ProductDetailClient({ product, settings, relatedProducts
                 </div>
 
                 {(product.discount_percentage || 0) > 0 && (
-                  <span className="px-3.5 py-1.5 bg-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
+                  <span className="px-3.5 py-1 bg-red-700 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
                     {product.discount_percentage}% OFF
                   </span>
                 )}
               </div>
 
               {/* Status & Delivery Pill */}
-              <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-stone-100 text-xs">
+              <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-stone-100 text-xs">
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold uppercase tracking-wider text-[10px] ${
                   product.stock_status === 'in_stock'
-                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                     : product.stock_status === 'made_to_order'
-                    ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                    ? 'bg-amber-50 text-amber-900 border border-amber-200'
                     : 'bg-stone-100 text-stone-700 border border-stone-200'
                 }`}>
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>{product.stock_status === 'in_stock' ? 'In Stock & Ready' : product.stock_status === 'made_to_order' ? 'Bespoke Made to Order' : product.stock_status?.replace('_', ' ')}</span>
+                  <span>{product.stock_status === 'in_stock' ? 'In Stock Workshop' : product.stock_status === 'made_to_order' ? 'Handcrafted Made to Order' : product.stock_status?.replace('_', ' ')}</span>
                 </span>
 
                 {product.delivery_time && (
-                  <span className="text-muted-foreground flex items-center gap-1.5 font-medium text-xs">
+                  <span className="text-stone-500 flex items-center gap-1.5 font-medium text-xs">
                     <Calendar className="w-3.5 h-3.5 text-accent" />
                     <span>Est. Delivery: {product.delivery_time}</span>
                   </span>
@@ -295,7 +296,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-whatsapp py-4 flex-grow justify-center font-bold tracking-wide text-sm shadow-luxury hover:shadow-luxury-hover transition-all duration-300"
+                className="btn-whatsapp py-4 flex-grow justify-center font-bold tracking-wider text-xs uppercase shadow-md hover:shadow-lg"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Inquire on WhatsApp</span>
@@ -304,131 +305,80 @@ export default function ProductDetailClient({ product, settings, relatedProducts
               {settings.phone && (
                 <a
                   href={`tel:${settings.phone}`}
-                  className="btn-outline py-4 flex-grow justify-center border-stone-300 text-stone-800 hover:bg-stone-100 font-semibold text-sm transition-all duration-300"
+                  className="btn-outline py-4 flex-grow justify-center font-bold text-xs uppercase tracking-wider"
                 >
-                  <Phone className="w-4 h-4 text-accent" />
+                  <Phone className="w-4 h-4" />
                   <span>Call Master Craftsman</span>
                 </a>
               )}
             </div>
 
-            {/* Short Description */}
-            <div className="flex flex-col gap-2">
-              <h3 className="font-serif text-base font-bold text-foreground">Craft Overview</h3>
-              <p className="text-stone-700 text-sm leading-relaxed font-light whitespace-pre-line">
-                {product.description || product.short_description || 'Handcrafted from seasoned premium timber, custom engineered for timeless durability and heirloom luxury.'}
+            {/* Short Overview */}
+            <div className="flex flex-col gap-2 pt-2">
+              <h3 className="font-serif text-base font-bold text-stone-900">Craft Overview</h3>
+              <p className="text-stone-600 text-xs sm:text-sm leading-relaxed font-light whitespace-pre-line">
+                {product.description || product.short_description || 'Handcrafted from seasoned solid timber, custom engineered for timeless durability and heirloom luxury.'}
               </p>
             </div>
 
-            {/* Wood & Material Details Accordion Card */}
-            <div className="p-6 bg-stone-50/80 rounded-3xl border border-stone-200/80 flex flex-col gap-4">
-              <div className="flex items-center gap-2 text-primary border-b border-stone-200 pb-3">
+            {/* Wood & Material Details Card */}
+            <div className="p-6 bg-stone-50 rounded-3xl border border-stone-200/80 flex flex-col gap-4">
+              <div className="flex items-center gap-2 text-primary border-b border-stone-200/80 pb-3">
                 <Hammer className="w-4 h-4" />
-                <h3 className="font-serif text-sm font-bold uppercase tracking-wider">Wood & Material Specifications</h3>
+                <h3 className="font-serif text-xs font-bold uppercase tracking-wider text-stone-900">Wood & Material Specifications</h3>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                 {product.wood_type && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Primary Timber</span>
-                    <span className="font-bold text-stone-900">{product.wood_type}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Primary Timber</span>
+                    <span className="font-semibold text-stone-900">{product.wood_type}</span>
                   </div>
                 )}
                 {product.material_type && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Material Type</span>
-                    <span className="font-bold text-stone-900">{product.material_type}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Material Type</span>
+                    <span className="font-semibold text-stone-900">{product.material_type}</span>
                   </div>
                 )}
                 {product.finish_type && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Finish / Polish</span>
-                    <span className="font-bold text-stone-900">{product.finish_type}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Finish / Polish</span>
+                    <span className="font-semibold text-stone-900">{product.finish_type}</span>
                   </div>
                 )}
                 {product.color && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Color / Stain</span>
-                    <span className="font-bold text-stone-900">{product.color}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Color / Stain</span>
+                    <span className="font-semibold text-stone-900">{product.color}</span>
                   </div>
                 )}
                 {product.thickness && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Timber Thickness</span>
-                    <span className="font-bold text-stone-900">{product.thickness}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Timber Thickness</span>
+                    <span className="font-semibold text-stone-900">{product.thickness}</span>
                   </div>
                 )}
                 {product.warranty_info && (
                   <div>
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Warranty Guarantee</span>
-                    <span className="font-bold text-stone-900">{product.warranty_info}</span>
+                    <span className="text-stone-400 font-bold block text-[10px] uppercase tracking-wider">Warranty</span>
+                    <span className="font-semibold text-stone-900">{product.warranty_info}</span>
                   </div>
                 )}
               </div>
-
-              {product.durability_info && (
-                <div className="pt-3 border-t border-stone-200 text-xs">
-                  <span className="text-stone-400 font-medium block text-[10px] uppercase tracking-wider">Durability & Treatment</span>
-                  <span className="font-semibold text-stone-800">{product.durability_info}</span>
-                </div>
-              )}
             </div>
-
-            {/* Dimensions & Weight Card */}
-            {(product.dimensions || product.height || product.width || product.length || product.weight) && (
-              <div className="p-6 bg-white rounded-3xl border border-stone-200/80 flex flex-col gap-4 shadow-sm">
-                <div className="flex items-center gap-2 text-stone-800 border-b border-stone-150 pb-3">
-                  <Sparkles className="w-4 h-4 text-accent" />
-                  <h3 className="font-serif text-sm font-bold uppercase tracking-wider">Dimensions & Sizing</h3>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-                  {product.height && (
-                    <div>
-                      <span className="text-stone-400 font-medium block text-[10px] uppercase">Height</span>
-                      <span className="font-bold text-stone-900">{product.height}</span>
-                    </div>
-                  )}
-                  {product.width && (
-                    <div>
-                      <span className="text-stone-400 font-medium block text-[10px] uppercase">Width</span>
-                      <span className="font-bold text-stone-900">{product.width}</span>
-                    </div>
-                  )}
-                  {product.length && (
-                    <div>
-                      <span className="text-stone-400 font-medium block text-[10px] uppercase">Length</span>
-                      <span className="font-bold text-stone-900">{product.length}</span>
-                    </div>
-                  )}
-                  {product.weight && (
-                    <div>
-                      <span className="text-stone-400 font-medium block text-[10px] uppercase">Weight</span>
-                      <span className="font-bold text-stone-900">{product.weight}</span>
-                    </div>
-                  )}
-                </div>
-
-                {product.dimensions && (
-                  <div className="pt-2 border-t border-stone-100 text-xs">
-                    <span className="text-stone-400 font-medium block text-[10px] uppercase">Overall Dimensions</span>
-                    <span className="font-semibold text-stone-900">{product.dimensions}</span>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Atelier Quality Highlights */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-200/60 flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-amber-800 flex-shrink-0" />
+              <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/60 flex items-center gap-3">
+                <ShieldCheck className="w-5 h-5 text-amber-900 flex-shrink-0" />
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-stone-900">Seasoned Timber</span>
                   <span className="text-[10px] text-stone-500">Kiln dried & termite proof</span>
                 </div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-200/60 flex items-center gap-3">
-                <Award className="w-5 h-5 text-amber-800 flex-shrink-0" />
+              <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/60 flex items-center gap-3">
+                <Award className="w-5 h-5 text-amber-900 flex-shrink-0" />
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-stone-900">Custom Built</span>
                   <span className="text-[10px] text-stone-500">Made to exact dimensions</span>
@@ -441,98 +391,101 @@ export default function ProductDetailClient({ product, settings, relatedProducts
         </div>
 
         {/* Divider */}
-        <div className="my-20 h-px bg-stone-200" />
+        <div className="my-20 divider-gold" />
 
         {/* Custom Inquiry Form Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" id="inquiry-form">
-          <div className="lg:col-span-5 flex flex-col gap-4">
-            <span className="section-subtitle">Tailored Creations</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
-              Request Custom Quote
+          <div className="lg:col-span-5 flex flex-col gap-3">
+            <div className="section-tag w-fit mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <span>CUSTOM ORDER</span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-stone-950">
+              Request Custom Dimensions
             </h2>
-            <p className="text-muted-foreground text-sm leading-relaxed font-light">
-              Want custom dimensions, specific timber polish, or modified features? Send your specifications directly to our master workshop.
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed font-light">
+              Need specific timber thickness, custom carving patterns, or modified finish shades? Send your specifications directly to our master workshop.
             </p>
           </div>
 
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 border border-stone-250/60 shadow-luxury rounded-3xl">
+          <div className="lg:col-span-7 bg-white p-8 sm:p-10 border border-stone-200/80 shadow-luxury rounded-3xl">
             {submitSuccess && (
-              <div className="mb-6 p-4 bg-emerald-50 text-emerald-800 rounded-2xl flex items-center gap-3 border border-emerald-200 text-sm font-medium animate-fade-in">
+              <div className="mb-6 p-4 bg-emerald-50 text-emerald-800 rounded-2xl flex items-center gap-3 border border-emerald-200 text-xs font-semibold animate-fade-in">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-emerald-600" />
                 <span>{submitSuccess}</span>
               </div>
             )}
 
             {submitError && (
-              <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-2xl flex items-center gap-3 border border-red-200 text-sm font-medium animate-fade-in">
+              <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-2xl flex items-center gap-3 border border-red-200 text-xs font-semibold animate-fade-in">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <span>{submitError}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit(onInquirySubmit)} className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="text-xs font-semibold text-stone-700 uppercase tracking-wider">Your Full Name *</label>
+            <form onSubmit={handleSubmit(onInquirySubmit)} className="flex flex-col gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="name" className="text-[10px] font-bold text-stone-600 uppercase tracking-widest">Full Name *</label>
                   <input
                     id="name"
                     type="text"
                     {...register('name')}
                     placeholder="E.g., Rajesh Sharma"
-                    className="input-luxury text-sm"
+                    className="input-luxury"
                   />
                   {errors.name && (
-                    <span className="text-xs text-red-500 font-medium">{errors.name.message}</span>
+                    <span className="text-[11px] text-red-600 font-medium">{errors.name.message}</span>
                   )}
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="phone" className="text-xs font-semibold text-stone-700 uppercase tracking-wider">Phone Number *</label>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="phone" className="text-[10px] font-bold text-stone-600 uppercase tracking-widest">Phone Number *</label>
                   <input
                     id="phone"
                     type="tel"
                     {...register('phone')}
                     placeholder="E.g., +91 98765 43210"
-                    className="input-luxury text-sm"
+                    className="input-luxury"
                   />
                   {errors.phone && (
-                    <span className="text-xs text-red-500 font-medium">{errors.phone.message}</span>
+                    <span className="text-[11px] text-red-600 font-medium">{errors.phone.message}</span>
                   )}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="email" className="text-xs font-semibold text-stone-700 uppercase tracking-wider">Email Address (Optional)</label>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="email" className="text-[10px] font-bold text-stone-600 uppercase tracking-widest">Email Address (Optional)</label>
                 <input
                   id="email"
                   type="email"
                   {...register('email')}
-                  placeholder="E.g., rajesh@gmail.com"
-                  className="input-luxury text-sm"
+                  placeholder="E.g., rajesh@domain.com"
+                  className="input-luxury"
                 />
                 {errors.email && (
-                  <span className="text-xs text-red-500 font-medium">{errors.email.message}</span>
+                  <span className="text-[11px] text-red-600 font-medium">{errors.email.message}</span>
                 )}
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="message" className="text-xs font-semibold text-stone-700 uppercase tracking-wider">Custom Requirements & Notes *</label>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="message" className="text-[10px] font-bold text-stone-600 uppercase tracking-widest">Custom Sizing & Notes *</label>
                 <textarea
                   id="message"
                   rows={4}
                   {...register('message')}
-                  placeholder="Specify custom sizing, wood type, polish shade, or delivery location..."
-                  className="input-luxury text-sm resize-none"
+                  placeholder="Specify custom sizing (e.g., Height 7ft x Width 3.5ft), wood type preference, or special carving requests..."
+                  className="input-luxury resize-none"
                 />
                 {errors.message && (
-                  <span className="text-xs text-red-500 font-medium">{errors.message.message}</span>
+                  <span className="text-[11px] text-red-600 font-medium">{errors.message.message}</span>
                 )}
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary justify-center font-bold tracking-wide w-full py-4 text-sm mt-2 shadow-luxury"
+                className="btn-primary justify-center font-bold text-xs uppercase tracking-wider w-full py-4 text-sm mt-2 shadow-md hover:shadow-lg"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
@@ -540,7 +493,7 @@ export default function ProductDetailClient({ product, settings, relatedProducts
                     <span>Submitting Inquiry...</span>
                   </span>
                 ) : (
-                  'Submit Custom Design Request'
+                  'Submit Custom Quote Request'
                 )}
               </button>
             </form>
@@ -551,9 +504,9 @@ export default function ProductDetailClient({ product, settings, relatedProducts
         {relatedProducts && relatedProducts.length > 0 && (
           <div className="mt-24">
             <div className="flex flex-col gap-2 mb-10">
-              <span className="section-subtitle">Complementary Creations</span>
-              <h2 className="font-serif text-3xl font-bold text-foreground">
-                Related Handcrafted Masterpieces
+              <span className="section-subtitle">Complementary Masterpieces</span>
+              <h2 className="font-serif text-3xl font-bold text-stone-950">
+                Related Handcrafted Creations
               </h2>
             </div>
 
@@ -629,3 +582,4 @@ export default function ProductDetailClient({ product, settings, relatedProducts
     </div>
   );
 }
+

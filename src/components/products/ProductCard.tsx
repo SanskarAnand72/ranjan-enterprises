@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Tag, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Star, Tag, Compass } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import type { Product } from '@/types';
 
@@ -31,14 +31,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 25 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: Math.min(index * 0.08, 0.4) }}
-      className="group relative flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-luxury hover:shadow-luxury-hover border border-stone-250/60 transition-all duration-500 hover:-translate-y-1.5"
+      transition={{ duration: 0.5, delay: Math.min(index * 0.06, 0.3), ease: [0.16, 1, 0.3, 1] }}
+      className="group relative flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-luxury hover:shadow-luxury-hover border border-stone-200/80 transition-all duration-500 hover:-translate-y-1.5"
     >
-      {/* Top Image Box */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 flex-shrink-0">
+      {/* Top Image Box with Premium 4:3 / 4:5 Proportion */}
+      <div className="relative aspect-[4/3] sm:aspect-[4/5] w-full overflow-hidden bg-stone-100 flex-shrink-0">
         
         {/* Loading Skeleton */}
         {!isLoaded && (
@@ -52,33 +52,34 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           alt={product.name}
           onLoad={() => setIsLoaded(true)}
           onError={handleImageError}
-          className={`w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 ${
+          className={`w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           loading="lazy"
         />
 
-        {/* Shine Overlay */}
-        <div className="absolute inset-0 bg-card-shine opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        {/* Dark subtle bottom vignette for badge legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-stone-950/20 opacity-70 pointer-events-none" />
 
-        {/* Badges Container */}
+        {/* Top Badges */}
         <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-start justify-between pointer-events-none">
           <div className="flex flex-col gap-1.5 items-start">
             {isFeatured && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-primary text-white shadow-md">
+              <span className="badge-gold">
                 <Star className="w-2.5 h-2.5 fill-current" />
                 <span>Signature</span>
               </span>
             )}
             {product.wood_type && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-950/80 text-amber-100 backdrop-blur-md shadow-sm border border-amber-800/40">
-                Wood: {product.wood_type}
+              <span className="badge-wood">
+                <Compass className="w-2.5 h-2.5 text-accent" />
+                <span>{product.wood_type}</span>
               </span>
             )}
           </div>
 
           {discount > 0 && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-wider uppercase bg-red-600 text-white shadow-md">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-wider uppercase bg-red-700 text-white shadow-sm">
               <Tag className="w-2.5 h-2.5" />
               <span>{discount}% OFF</span>
             </span>
@@ -87,32 +88,32 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         {/* Category Pill */}
         {product.category?.name && (
-          <span className="absolute bottom-3 left-3.5 z-10 inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-stone-900/80 text-white backdrop-blur-sm border border-white/10">
+          <span className="absolute bottom-3 left-3.5 z-10 inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-stone-900/80 text-amber-200 backdrop-blur-md border border-amber-950/30">
             {product.category.name}
           </span>
         )}
       </div>
 
-      {/* Card Body - Flex Grow to push footer down evenly */}
-      <div className="p-5 flex-grow flex flex-col justify-between gap-4">
+      {/* Card Body */}
+      <div className="p-5 flex-grow flex flex-col justify-between gap-4 bg-white">
         
         <div className="flex flex-col gap-2">
-          <h3 className="font-serif text-lg font-bold text-stone-900 group-hover:text-primary transition-colors duration-300 line-clamp-1">
+          <h3 className="font-serif text-lg font-bold text-stone-950 group-hover:text-primary transition-colors duration-300 line-clamp-1 tracking-tight">
             {product.name}
           </h3>
 
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed font-light">
-            {product.short_description || product.description || 'Bespoke custom woodwork handcrafted by master artisans.'}
+          <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed font-light">
+            {product.short_description || product.description || 'Bespoke custom joinery handcrafted by master artisans.'}
           </p>
         </div>
 
         {/* Card Footer */}
         <div className="pt-3.5 border-t border-stone-200/60 flex items-center justify-between mt-auto">
           <div className="flex flex-col">
-            <span className="text-[9px] text-stone-400 font-semibold uppercase tracking-wider">Investment</span>
+            <span className="text-[9px] text-stone-400 font-bold uppercase tracking-widest">Investment</span>
             <div className="flex items-baseline gap-1.5">
               <span className="text-sm font-bold text-primary font-serif">
-                {product.price_label || (product.price ? formatPrice(product.price) : 'Price on Request')}
+                {product.price_label || (product.price ? formatPrice(product.price) : 'Custom Quote')}
               </span>
               {product.original_price && product.price && product.original_price > product.price && (
                 <span className="text-2xs text-stone-400 line-through">
@@ -124,10 +125,10 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
 
           <Link
             href={`/products/${product.slug}`}
-            className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-stone-100 hover:bg-primary hover:text-white text-stone-800 rounded-full text-xs font-semibold tracking-wide transition-all duration-300"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-stone-100 hover:bg-primary hover:text-white text-stone-800 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-sm"
           >
-            <span>Details</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>View</span>
+            <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 
@@ -135,3 +136,4 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     </motion.div>
   );
 }
+
